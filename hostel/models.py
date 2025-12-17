@@ -13,9 +13,9 @@ class Hostel(models.Model):
     contact_email = models.EmailField()
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
 class Room(models.Model):
-    room_number = models.CharField(max_length=10)
-    capacity = models.IntegerField()
-    is_available = models.BooleanField()
+    room_number = models.CharField(max_length=10, unique=True)
+    capacity = models.IntegerField(validators=[MinValueValidator(1)])
+    is_available = models.BooleanField(default=True)
     block = models.CharField(max_length=50)
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE)
 
