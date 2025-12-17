@@ -57,6 +57,6 @@ class Payment(models.Model):
 class Student(models.Model):
     course = models.CharField(max_length=50)
     contact_info = models.CharField(max_length=10)
-    hostel = models.OneToOneField(Hostel, on_delete=models.SET_NULL)
+    hostel = models.OneToOneField(Hostel, on_delete=models.SET_NULL, null=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
