@@ -15,7 +15,19 @@ class Hostel(models.Model):
 class Room(models.Model):
     room_number = models.CharField(max_length=10, unique=True)
     capacity = models.IntegerField(validators=[MinValueValidator(1)])
-    is_available = models.BooleanField(default=True)
     block = models.CharField(max_length=50)
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE)
+
+    @property
+    def is_available(self):
+        return self.room_assignment.count() < self.capacity
+
+class RoomAssignment(models.Model):
+    start_date = models.DateField()
+    end_date = models.DateField()
+    student = models.OneToOneField('Student', on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='room_assignment')
+
+    class Meta:
+        unique_together = ('room', 'student')
 
