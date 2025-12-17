@@ -37,3 +37,17 @@ class Fee(models.Model):
     due_date = models.DateField()
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE)
 
+class Payment(models.Model):
+    PAYMENT_STATUS_PENDING = 'P'
+    PAYMENT_STATUS_COMPLETE = 'C'
+    PAYMENT_STATUS_FAILED = 'F'
+
+    PAYMENT_STATUS = [
+        (PAYMENT_STATUS_PENDING, 'Pending'),
+        (PAYMENT_STATUS_COMPLETE, 'Completed'),
+        (PAYMENT_STATUS_FAILED, 'Failed')
+    ]
+    amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_date = models.DateField()
+    status = models.CharField(max_length=1, choices=PAYMENT_STATUS, default=PAYMENT_STATUS_PENDING)
+
