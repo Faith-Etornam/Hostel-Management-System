@@ -9,6 +9,7 @@ djangorestframework = "*"
 mysqlclient = "*"
 django-debug-toolbar = "*"
 djoser = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 
