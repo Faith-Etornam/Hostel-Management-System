@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.conf import settings
 
 # Create your models here.
 
@@ -12,6 +13,7 @@ class Hostel(models.Model):
     name = models.CharField(max_length=255, unique=True)
     contact_email = models.EmailField()
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
+
 class Room(models.Model):
     room_number = models.CharField(max_length=10, unique=True)
     capacity = models.IntegerField(validators=[MinValueValidator(1)])
@@ -39,15 +41,22 @@ class Fee(models.Model):
 
 class Payment(models.Model):
     PAYMENT_STATUS_PENDING = 'P'
-    PAYMENT_STATUS_COMPLETE = 'C'
+    PAYMENT_STATUS_COMPLETED = 'C'
     PAYMENT_STATUS_FAILED = 'F'
 
     PAYMENT_STATUS = [
         (PAYMENT_STATUS_PENDING, 'Pending'),
-        (PAYMENT_STATUS_COMPLETE, 'Completed'),
+        (PAYMENT_STATUS_COMPLETED, 'Completed'),
         (PAYMENT_STATUS_FAILED, 'Failed')
     ]
+    
     amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
     payment_date = models.DateField()
     status = models.CharField(max_length=1, choices=PAYMENT_STATUS, default=PAYMENT_STATUS_PENDING)
+
+class Student(models.Model):
+    course = models.CharField(max_length=50)
+    contact_info = models.CharField(max_length=10)
+    hostel = models.OneToOneField(Hostel, on_delete=models.SET_NULL)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
