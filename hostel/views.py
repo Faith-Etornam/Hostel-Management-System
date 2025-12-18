@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from .models import Hostel, Student
-from .serializers import HostelSerializer, StudentSerializer
+from .serializers import HostelSerializer, StudentSerializer, UpdateStudentSerializer
 
 # Create your views here.
 class HostelViewSet(ModelViewSet):
@@ -9,6 +9,11 @@ class HostelViewSet(ModelViewSet):
     serializer_class = HostelSerializer
 
 class StudentViewSet(ModelViewSet):
+    http_method_names = ['get', 'head', 'options', 'post', 'patch']
     queryset = Student.objects.all()
-    serializer_class = StudentSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'PATCH':
+            return UpdateStudentSerializer
+        return StudentSerializer
 
