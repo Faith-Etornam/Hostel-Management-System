@@ -40,7 +40,10 @@ class StudentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         print(validated_data)
         user = get_user_model()
-        user.objects.create_user(email=validated_data['email'])
+        user_data = validated_data.pop('user')
+        user.objects.create_user(**user_data)
+        Student.objects.create(**validated_data)
+
 
 
 
