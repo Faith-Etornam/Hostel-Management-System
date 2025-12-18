@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Hostel, Address
+from .models import Hostel, Address, Student
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,6 +24,11 @@ class HostelSerializer(serializers.ModelSerializer):
         Hostel.objects.filter(pk=instance.pk).update(**validated_data)
         instance.refresh_from_db()
         return instance
+    
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ['course', 'hostel', 'user', 'contact_info']
 
 
 

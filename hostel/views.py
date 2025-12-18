@@ -8,3 +8,5 @@ class HostelViewSet(ModelViewSet):
     queryset = Hostel.objects.select_related('address').all()
     serializer_class = HostelSerializer
 
+
+
