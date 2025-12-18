@@ -19,8 +19,11 @@ class HostelSerializer(serializers.ModelSerializer):
     
     def update(self, instance, validated_data):
         address_data = validated_data.pop('address')
-        address = Address.objects.update(instance.address, **address_data)
-        return Hostel.objects.update(instance, **validated_data, address=address)
+        Address.objects.filter(pk=instance.address.pk).update(**address_data)
+
+        Hostel.objects.filter(pk=instance.pk).update(**validated_data)
+        instance.refresh_from_db()
+        return instance
 
 
 
