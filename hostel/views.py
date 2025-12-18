@@ -5,6 +5,6 @@ from .serializers import HostelSerializer
 
 # Create your views here.
 class HostelViewSet(ModelViewSet):
-    queryset = Hostel.objects.all()
+    queryset = Hostel.objects.select_related('address').all()
     serializer_class = HostelSerializer
-    
+

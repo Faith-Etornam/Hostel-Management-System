@@ -12,7 +12,7 @@ class Address(models.Model):
 class Hostel(models.Model):
     name = models.CharField(max_length=255, unique=True)
     contact_email = models.EmailField()
-    address = models.ForeignKey(Address, on_delete=models.PROTECT)
+    address = models.ForeignKey(Address, on_delete=models.PROTECT, related_name='address')
 
 class Room(models.Model):
     room_number = models.CharField(max_length=10, unique=True)
