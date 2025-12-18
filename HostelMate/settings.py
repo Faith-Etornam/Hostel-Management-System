@@ -144,3 +144,5 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = 'core.User'
 
+AUTHENTICATION_BACKENDS = ['core.backends.EmailBackend']
+
