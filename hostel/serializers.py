@@ -38,11 +38,11 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = ['user', 'course', 'hostel', 'contact_info']
 
     def create(self, validated_data):
-        print(validated_data)
         user = get_user_model()
         user_data = validated_data.pop('user')
-        user.objects.create_user(**user_data)
-        Student.objects.create(**validated_data)
+        user = user.objects.create_user(**user_data)
+        student = Student.objects.create(**validated_data, user=user)
+        return student
 
 
 

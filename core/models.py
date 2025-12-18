@@ -6,6 +6,7 @@ from .managers import CustomUserManager
 class User(AbstractUser, PermissionsMixin):
     objects = CustomUserManager()
     email = models.EmailField(unique=True)
+    username = models.CharField(max_length=255, null=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     
