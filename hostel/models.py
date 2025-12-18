@@ -14,6 +14,9 @@ class Hostel(models.Model):
     contact_email = models.EmailField()
     address = models.ForeignKey(Address, on_delete=models.PROTECT, related_name='address')
 
+    def __str__(self):
+        return self.name
+
 class Room(models.Model):
     room_number = models.CharField(max_length=10, unique=True)
     capacity = models.IntegerField(validators=[MinValueValidator(1)])
