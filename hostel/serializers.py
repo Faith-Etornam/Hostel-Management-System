@@ -31,6 +31,13 @@ class User(serializers.ModelSerializer):
         model = get_user_model()
         fields = ['email', 'first_name', 'last_name']
 
+class UpdateStudentSerializer(serializers.ModelSerializer):
+    user = User()
+    class Meta:
+        model = Student
+        fields = ['user', 'contact_info']
+
+
 class StudentSerializer(serializers.ModelSerializer):
     user = User()
     class Meta:
@@ -38,11 +45,14 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = ['user', 'course', 'hostel', 'contact_info']
 
     def create(self, validated_data):
-        user = get_user_model()
         user_data = validated_data.pop('user')
-        user = user.objects.create_user(**user_data)
+        user = get_user_model().objects.create_user(**user_data)
         student = Student.objects.create(**validated_data, user=user)
         return student
+    
+    def update(self, instance, validated_data):
+        return 
+    
 
 
 
