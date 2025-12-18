@@ -144,5 +144,13 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = 'core.User'
 
-AUTHENTICATION_BACKENDS = ['core.backends.EmailBackend']
+AUTHENTICATION_BACKENDS= [
+    'core.backends.EmailBackend',
+    # 'djoser.backends.LoginFieldBackend',
+]
+
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+}
+
 
