@@ -7,6 +7,6 @@ router.register('hostels', HostelViewSet, basename='hostel')
 router.register('students', StudentViewSet, basename='students')
 
 room_router = routers.NestedDefaultRouter(router, 'hostels', lookup='hostel')
-room_router.register('room', RoomViewSet, basename='rooms')
+room_router.register('rooms', RoomViewSet, basename='rooms')
 
 urlpatterns = router.urls + room_router.urls
