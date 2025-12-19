@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Hostel, Address, Student
 from django.contrib.auth import get_user_model
 
+# Serializers concerning the Hostel System
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
@@ -26,6 +27,8 @@ class HostelSerializer(serializers.ModelSerializer):
         instance.refresh_from_db()
         return instance
     
+
+# Serializers concerning the Users and students
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -54,7 +57,6 @@ class UpdateStudentSerializer(serializers.ModelSerializer):
         instance.refresh_from_db()
         return instance
 
-
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
@@ -67,10 +69,6 @@ class StudentSerializer(serializers.ModelSerializer):
         student = Student.objects.create(**validated_data, user=user)
         return student
 
-   
-        
-    
-    
 
 
 
