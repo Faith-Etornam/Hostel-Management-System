@@ -26,23 +26,23 @@ class HostelSerializer(serializers.ModelSerializer):
         instance.refresh_from_db()
         return instance
     
-class User(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ['email', 'first_name', 'last_name']
+        fields = ['email', 'first_name', 'last_name', 'password']
 
 class UpdateStudentSerializer(serializers.ModelSerializer):
-    user = User()
+    user = UserSerializer()
     class Meta:
         model = Student
         fields = ['user', 'contact_info']
 
 
 class StudentSerializer(serializers.ModelSerializer):
-    user = User()
+    user = UserSerializer()
     class Meta:
         model = Student
-        fields = ['user', 'course', 'hostel', 'contact_info']
+        fields = ['id', 'user', 'course', 'hostel', 'contact_info']
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
@@ -50,8 +50,6 @@ class StudentSerializer(serializers.ModelSerializer):
         student = Student.objects.create(**validated_data, user=user)
         return student
     
-    def update(self, instance, validated_data):
-        return 
     
 
 

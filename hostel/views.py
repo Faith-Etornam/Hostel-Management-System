@@ -9,7 +9,6 @@ class HostelViewSet(ModelViewSet):
     serializer_class = HostelSerializer
 
 class StudentViewSet(ModelViewSet):
-    http_method_names = ['get', 'head', 'options', 'post', 'patch']
     queryset = Student.objects.all()
 
     def get_serializer_class(self):
