@@ -13,6 +13,7 @@ class Hostel(models.Model):
     name = models.CharField(max_length=255, unique=True)
     contact_email = models.EmailField()
     address = models.ForeignKey(Address, on_delete=models.PROTECT, related_name='address')
+    number_of_rooms = models.IntegerField()
 
     def __str__(self):
         return self.name
