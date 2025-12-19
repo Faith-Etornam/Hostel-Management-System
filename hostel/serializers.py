@@ -4,10 +4,22 @@ from django.contrib.auth import get_user_model
 
 # Serializers concerning the Hostel System
 class RoomSerializer(serializers.ModelSerializer):
-    hostel = serializers.CharField(max_length=255)
+    hostel = serializers.CharField(max_length=255, read_only=True)
     class Meta:
         model = Room
         fields = ['room_number', 'capacity', 'block', 'hostel']
+
+    def save(self, **kwargs):
+        hostel_id = self.context['hostel_id']
+        try:
+            room = Room.objects.get(hostel=hostel_id)
+            room.capacity = self.validated_data['capacity']
+            room.block = self.validated_data['block']
+            room.room_number = self.validated_data['room_number']
+            room.save()    
+        except Room.DoesNotExist:
+            room.objects.create(**self.validated_data, hostel=hostel_id)
+
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -73,9 +85,7 @@ class StudentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user_data = validated_data.pop('user')
         user = get_user_model().objects.create_user(**user_data)
-        student = Student.objects.create(**validated_data, user=user)
-        return student
-    
+        return Student.objects.create(**validated_data, user=user)
 
 
 
