@@ -7,7 +7,7 @@ class RoomSerializer(serializers.ModelSerializer):
     hostel = serializers.CharField(max_length=255)
     class Meta:
         model = Room
-        fields = ['room_number', 'capacity', 'block']
+        fields = ['room_number', 'capacity', 'block', 'hostel']
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:

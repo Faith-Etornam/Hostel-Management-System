@@ -18,7 +18,9 @@ class StudentViewSet(ModelViewSet):
         return StudentSerializer 
     
 class RoomViewSet(ModelViewSet):
-    queryset = Room.objects.all()
     serializer_class = RoomSerializer
+
+    def get_queryset(self):
+        return Room.objects.filter(pk=self.kwargs['hostel_pk'])
     
 
