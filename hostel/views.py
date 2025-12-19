@@ -16,4 +16,5 @@ class StudentViewSet(ModelViewSet):
         if self.request.method == 'PUT':
             return UpdateStudentSerializer
         return StudentSerializer 
+    
 

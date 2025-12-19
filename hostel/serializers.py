@@ -26,10 +26,14 @@ class HostelSerializer(serializers.ModelSerializer):
         instance.refresh_from_db()
         return instance
     
-class UserUpdateSerializer(serializers.ModelSerializer):
+class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ['email', 'first_name', 'last_name']
+
+        extra_kwargs = {
+            'email': {'validators': []}
+        }
     
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,10 +42,17 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
 class UpdateStudentSerializer(serializers.ModelSerializer):
-    user = UserUpdateSerializer()
+    user = UpdateUserSerializer()
     class Meta:
         model = Student
         fields = ['user', 'contact_info']
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user')
+        get_user_model().objects.filter(pk=instance.user.pk).update(**user_data)
+        Student.objects.filter(pk=instance.pk).update(**validated_data)
+        instance.refresh_from_db()
+        return instance
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -50,12 +61,14 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = ['id', 'user', 'course', 'hostel', 'contact_info']
 
-
     def create(self, validated_data):
         user_data = validated_data.pop('user')
         user = get_user_model().objects.create_user(**user_data)
         student = Student.objects.create(**validated_data, user=user)
         return student
+
+   
+        
     
     
 
