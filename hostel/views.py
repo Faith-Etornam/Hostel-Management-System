@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from .models import Hostel, Student, Room
-from .serializers import HostelSerializer, StudentSerializer, UpdateStudentSerializer
+from .serializers import HostelSerializer, StudentSerializer, UpdateStudentSerializer, RoomSerializer
 
 # Create your views here.
 class HostelViewSet(ModelViewSet):
@@ -19,6 +19,6 @@ class StudentViewSet(ModelViewSet):
     
 class RoomViewSet(ModelViewSet):
     queryset = Room.objects.all()
-    serializer_class = 
+    serializer_class = RoomSerializer
     
 

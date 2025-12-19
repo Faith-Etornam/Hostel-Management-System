@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'rest_framework',
+    'rest_framework_nested',
     'djoser',
     'core',
     'hostel'
@@ -146,7 +147,6 @@ AUTH_USER_MODEL = 'core.User'
 
 AUTHENTICATION_BACKENDS= [
     'core.backends.EmailBackend',
-    # 'djoser.backends.LoginFieldBackend',
 ]
 
 DJOSER = {

@@ -3,6 +3,12 @@ from .models import Hostel, Address, Student, Room
 from django.contrib.auth import get_user_model
 
 # Serializers concerning the Hostel System
+class RoomSerializer(serializers.ModelSerializer):
+    hostel = serializers.CharField(max_length=255)
+    class Meta:
+        model = Room
+        fields = ['room_number', 'capacity', 'block']
+
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
@@ -10,9 +16,10 @@ class AddressSerializer(serializers.ModelSerializer):
 
 class HostelSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
+    rooms = RoomSerializer(many=True)
     class Meta:
         model = Hostel
-        fields = ['id', 'name', 'contact_email', 'address']
+        fields = ['id', 'name', 'contact_email', 'address', 'rooms']
 
     def create(self, validated_data):
         address_data = validated_data.pop('address')
@@ -70,11 +77,6 @@ class StudentSerializer(serializers.ModelSerializer):
         return student
     
 
-class RoomSerializer(serializers.ModelSerializer):
-    hostel = serializers.CharField()
-    class Meta:
-        model = Room
-        fields = ['room_number', 'capacity', 'block', 'hostel']
 
 
 

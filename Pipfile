@@ -10,6 +10,7 @@ mysqlclient = "*"
 django-debug-toolbar = "*"
 djoser = "*"
 djangorestframework-simplejwt = "*"
+drf-nested-routers = "*"
 
 [dev-packages]
 

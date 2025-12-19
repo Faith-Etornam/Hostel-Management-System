@@ -21,7 +21,7 @@ class Hostel(models.Model):
 class Room(models.Model):
     room_number = models.CharField(max_length=10, unique=True)
     capacity = models.IntegerField(validators=[MinValueValidator(1)])
-    block = models.CharField(max_length=50)
+    block = models.CharField(max_length=50, null=True)
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name='rooms')
 
     @property
