@@ -26,18 +26,19 @@ class HostelSerializer(serializers.ModelSerializer):
         instance.refresh_from_db()
         return instance
     
-class AddUserSerializer(serializers.ModelSerializer):
-     class Meta:
-        model = get_user_model()
-        fields = ['email', 'first_name', 'last_name', 'password']
-    
-
-class UserSerializer(serializers.ModelSerializer):
+class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ['email', 'first_name', 'last_name']
+    
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['email', 'first_name', 'last_name', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+
 class UpdateStudentSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserUpdateSerializer()
     class Meta:
         model = Student
         fields = ['user', 'contact_info']
@@ -49,19 +50,12 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = ['id', 'user', 'course', 'hostel', 'contact_info']
 
-    
-    
-class AddStudentSerializer(serializers.ModelSerializer):
-    user = AddUserSerializer()
-    class Meta:
-        model = Student
-        fields = ['id', 'user', 'course', 'hostel', 'contact_info']
 
-        def create(self, validated_data):
-            user_data = validated_data.pop('user')
-            user = get_user_model().objects.create_user(**user_data)
-            student = Student.objects.create(**validated_data, user=user)
-            return student
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user = get_user_model().objects.create_user(**user_data)
+        student = Student.objects.create(**validated_data, user=user)
+        return student
     
     
 
