@@ -22,7 +22,7 @@ class Room(models.Model):
     room_number = models.CharField(max_length=10, unique=True)
     capacity = models.IntegerField(validators=[MinValueValidator(1)])
     block = models.CharField(max_length=50)
-    hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE)
+    hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name='rooms')
 
     @property
     def is_available(self):

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Hostel, Address, Student
+from .models import Hostel, Address, Student, Room
 from django.contrib.auth import get_user_model
 
 # Serializers concerning the Hostel System
@@ -68,6 +68,15 @@ class StudentSerializer(serializers.ModelSerializer):
         user = get_user_model().objects.create_user(**user_data)
         student = Student.objects.create(**validated_data, user=user)
         return student
+    
+
+class RoomSerializer(serializers.ModelSerializer):
+    hostel = serializers.CharField()
+    class Meta:
+        model = Room
+        fields = ['room_number', 'capacity', 'block', 'hostel']
+
+
 
 
 
