@@ -10,8 +10,8 @@ class HostelViewSet(ModelViewSet):
     serializer_class = HostelSerializer
 
     def update(self, request, *args, **kwargs):
-        hostel = get_object_or_404(Hostel, pk=self.kwargs['hostel_pk']) 
-        serializer = HostelSerializer(instance=hostel, pk=self.kwargs['hostel_pk'])
+        hostel = get_object_or_404(Hostel, pk=self.kwargs['pk']) 
+        serializer = HostelSerializer(instance=hostel, pk=self.kwargs['pk'])
 
         if serializer.is_valid():
             serializer.save()

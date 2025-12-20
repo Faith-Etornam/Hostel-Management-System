@@ -14,7 +14,13 @@ class RoomSerializer(serializers.ModelSerializer):
         }
 
     def save(self, **kwargs):
+        
         hostel_id = self.context['hostel_id']
+
+        if not Hostel.objects.filter(pk=hostel_id).exists():
+            raise serializers.ValidationError(
+                {"hostel_id": f"Hostel with ID {hostel_id} does not exist."}
+            )
 
         if self.instance is not None:
 

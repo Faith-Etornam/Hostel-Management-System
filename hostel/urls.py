@@ -1,6 +1,7 @@
 from rest_framework.routers import DefaultRouter
 from rest_framework_nested import routers
 from .views import HostelViewSet, StudentViewSet, RoomViewSet
+from pprint import pprint
 
 router = routers.DefaultRouter()
 router.register('hostels', HostelViewSet, basename='hostel')
