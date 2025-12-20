@@ -6,16 +6,8 @@ from .models import Hostel, Student, Room
 from .serializers import HostelSerializer, StudentSerializer, UpdateStudentSerializer, RoomSerializer
 # Create your views here.
 class HostelViewSet(ModelViewSet):
-    queryset = Hostel.objects.select_related('address').all()
+    queryset = Hostel.objects.select_related('address').prefetch_related('rooms').all()
     serializer_class = HostelSerializer
-
-    def update(self, request, *args, **kwargs):
-        hostel = get_object_or_404(Hostel, pk=self.kwargs['pk']) 
-        serializer = HostelSerializer(instance=hostel, pk=self.kwargs['pk'])
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
 
 class StudentViewSet(ModelViewSet):
 
