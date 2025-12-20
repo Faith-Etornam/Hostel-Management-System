@@ -11,17 +11,19 @@ class RoomSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         hostel_id = self.context['hostel_id']
-        try:
-            room = Room.objects.get(hostel=hostel_id, pk=self.instance.pk)
-            room.capacity = self.validated_data['capacity']
-            room.block = self.validated_data['block']
-            room.room_number = self.validated_data['room_number']
-            room.save() 
-            self.instance = room   
-        except Room.DoesNotExist:
-            self.instance = Room.objects.create(**self.validated_data, hostel=hostel_id)
 
-        return self.instance
+        if self.instance is not None:
+
+            self.instance.capacity = self.validated_data.get('capacity')
+            self.instance.room_number = self.validated_data.get('room_number')
+            self.instance.block = self.validated_data.get('block')
+
+            self.instance.save()
+            return self.instance
+        
+        else:
+            self.instance = Room.objects.create(hostel_id=hostel_id, **self.validated_data)
+            return self.instance
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
