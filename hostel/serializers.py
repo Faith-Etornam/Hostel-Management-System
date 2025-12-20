@@ -7,7 +7,11 @@ class RoomSerializer(serializers.ModelSerializer):
     hostel = serializers.CharField(max_length=255, read_only=True)
     class Meta:
         model = Room
-        fields = ['room_number', 'capacity', 'block', 'hostel']
+        fields = ['id', 'room_number', 'capacity', 'block', 'hostel']
+
+        extra_kwargs = {
+            'room_number': {'validators': []}
+        }
 
     def save(self, **kwargs):
         hostel_id = self.context['hostel_id']
