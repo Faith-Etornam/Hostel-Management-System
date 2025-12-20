@@ -4,17 +4,16 @@ from django.contrib.auth import get_user_model
 
 # Serializers concerning the Hostel System
 class RoomSerializer(serializers.ModelSerializer):
-    hostel = serializers.CharField(max_length=255, read_only=True)
     class Meta:
         model = Room
-        fields = ['id', 'room_number', 'capacity', 'block', 'hostel']
+        fields = ['id', 'room_number', 'capacity', 'block']
 
         extra_kwargs = {
             'room_number': {'validators': []}
         }
 
     def save(self, **kwargs):
-        
+
         hostel_id = self.context['hostel_id']
 
         if not Hostel.objects.filter(pk=hostel_id).exists():
