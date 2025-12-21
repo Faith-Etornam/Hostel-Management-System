@@ -56,7 +56,7 @@ class HostelSerializer(serializers.ModelSerializer):
 
             if self.validated_data:
 
-                for attrr, value in self.validated_data.items():
+                for attr, value in self.validated_data.items():
                     setattr(self.instance, attr, value)
 
                 self.instance.save(update_fields=self.validated_data.keys())
@@ -77,7 +77,6 @@ class HostelSerializer(serializers.ModelSerializer):
             address = Address.objects.create(**address_data)
             self.instance = Hostel.objects.create(address=address, **self.validated_data)
             return self.instance
-    
 
 # Serializers concerning the Users and students
 class UpdateUserSerializer(serializers.ModelSerializer):
@@ -93,7 +92,10 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ['email', 'first_name', 'last_name', 'password']
-        extra_kwargs = {'password': {'write_only': True}}
+
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
 class UpdateStudentSerializer(serializers.ModelSerializer):
     user = UpdateUserSerializer()
@@ -119,7 +121,6 @@ class UpdateStudentSerializer(serializers.ModelSerializer):
 
         return instance
 
-
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
@@ -129,7 +130,8 @@ class StudentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user_data = validated_data.pop('user')
         user = get_user_model().objects.create_user(**user_data)
-        return Student.objects.create(**validated_data, user=user)
+        student = Student.objects.create(**validated_data, user=user)
+        return student
 
 
 
