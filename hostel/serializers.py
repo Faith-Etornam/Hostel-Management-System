@@ -5,9 +5,10 @@ from django.contrib.auth import get_user_model
 # Serializers concerning the Hostel System
 class RoomSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    is_available = serializers.BooleanField(read_only=True)
     class Meta:
         model = Room
-        fields = ['id', 'room_number', 'capacity', 'block']
+        fields = ['id', 'room_number', 'capacity', 'block', 'is_available']
 
         extra_kwargs = {
             'room_number': {'validators': []}
@@ -44,7 +45,7 @@ class HostelSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
     class Meta:
         model = Hostel
-        fields = ['id', 'name', 'contact_email', 'address']
+        fields = ['id', 'name', 'contact_email', 'number_of_rooms', 'address']
 
     
     def save(self, **kwargs):
@@ -75,19 +76,6 @@ class HostelSerializer(serializers.ModelSerializer):
             address = Address.objects.create(**address_data)
             self.instance = Hostel.objects.create(address=address, **self.validated_data)
             return self.instance
-
-    def create(self, validated_data):
-        address_data = validated_data.pop('address')
-        address = Address.objects.create(**address_data)
-        return Hostel.objects.create(**validated_data, address=address)
-    
-    def update(self, instance, validated_data):
-        address_data = validated_data.pop('address')
-        Address.objects.filter(pk=instance.address.pk).update(**address_data)
-
-        Hostel.objects.filter(pk=instance.pk).update(**validated_data)
-        instance.refresh_from_db()
-        return instance
     
 
 # Serializers concerning the Users and students
