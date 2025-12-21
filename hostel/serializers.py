@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Hostel, Address, Student, Room
+from .models import Hostel, Address, Student, Room, RoomPricing
 from django.db import IntegrityError, transaction
 from django.contrib.auth import get_user_model
 
@@ -16,7 +16,7 @@ class RoomSerializer(serializers.ModelSerializer):
             'room_number': {'validators': []}
         }
 
-    def get_prices(self, value):
+    def get_prices(self, obj):
         pass
 
     def save(self, **kwargs):
