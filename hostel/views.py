@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.exceptions import NotFound
 from .models import Hostel, Student, Room
-from .serializers import HostelSerializer, StudentSerializer, UpdateStudentSerializer, RoomSerializer
+from .serializers import HostelSerializer, StudentSerializer, UpdateStudentSerializer, RoomSerializer, RoomAssignmentSerializer
 # Create your views here.
 class HostelViewSet(ModelViewSet):
     queryset = Hostel.objects.select_related('address').all()
@@ -22,6 +23,11 @@ class StudentViewSet(ModelViewSet):
 class RoomViewSet(ModelViewSet):
     serializer_class = RoomSerializer
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+
+    @action(detail=True, methods=['post'])
+    def assign(self, request, pk=None, hostel_pk=None):
+        room = self.get_object()
+        serializer = Room
 
     def get_queryset(self):
         if not Hostel.objects.filter(pk=self.kwargs['hostel_pk']).exists():

@@ -40,6 +40,10 @@ class RoomSerializer(serializers.ModelSerializer):
         else:
             self.instance = Room.objects.create(hostel_id=hostel_id, **self.validated_data)
             return self.instance
+        
+class RoomAssignmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,7 +56,6 @@ class HostelSerializer(serializers.ModelSerializer):
         model = Hostel
         fields = ['id', 'name', 'contact_email', 'number_of_rooms', 'address']
 
-    
     def save(self, **kwargs):
 
         address_data = self.validated_data.pop('address', None)
@@ -142,7 +145,7 @@ class StudentSerializer(serializers.ModelSerializer):
             user_data = validated_data.pop('user')
             user = get_user_model().objects.create_user(**user_data)
             student = Student.objects.create(**validated_data, user=user)
-            return student
+        return student
 
 
 
