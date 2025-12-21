@@ -42,10 +42,9 @@ class AddressSerializer(serializers.ModelSerializer):
 
 class HostelSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
-    rooms = RoomSerializer(many=True, read_only=True)
     class Meta:
         model = Hostel
-        fields = ['id', 'name', 'contact_email', 'address', 'rooms']
+        fields = ['id', 'name', 'contact_email', 'address']
 
     
     def save(self, **kwargs):
