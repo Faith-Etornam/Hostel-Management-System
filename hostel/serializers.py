@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Hostel, Address, Student, Room
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.contrib.auth import get_user_model
 
 # Serializers concerning the Hostel System
@@ -134,10 +134,11 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'course', 'contact_info']
 
     def create(self, validated_data):
-        user_data = validated_data.pop('user')
-        user = get_user_model().objects.create_user(**user_data)
-        student = Student.objects.create(**validated_data, user=user)
-        return student
+        with transaction.atomic():
+            user_data = validated_data.pop('user')
+            user = get_user_model().objects.create_user(**user_data)
+            student = Student.objects.create(**validated_data, user=user)
+            return student
 
 
 
