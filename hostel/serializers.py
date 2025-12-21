@@ -113,7 +113,7 @@ class UpdateStudentSerializer(serializers.ModelSerializer):
         fields = ['user', 'contact_info']
 
     def update(self, instance, validated_data):
-        user_data = validated_data.pop('user')
+        user_data = validated_data.pop('user', None)
 
         try:
         
