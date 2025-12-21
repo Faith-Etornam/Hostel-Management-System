@@ -11,7 +11,7 @@ class HostelViewSet(ModelViewSet):
 
 class StudentViewSet(ModelViewSet):
 
-    queryset = Student.objects.all()
+    queryset = Student.objects.select_related('user').all()
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':
@@ -20,6 +20,7 @@ class StudentViewSet(ModelViewSet):
     
 class RoomViewSet(ModelViewSet):
     serializer_class = RoomSerializer
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
 
     def get_queryset(self):
         if not Hostel.objects.filter(pk=self.kwargs['hostel_pk']).exists():

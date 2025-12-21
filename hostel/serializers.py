@@ -23,9 +23,9 @@ class RoomSerializer(serializers.ModelSerializer):
 
         if self.instance is not None:
 
-            self.instance.capacity = self.validated_data.get('capacity')
-            self.instance.room_number = self.validated_data.get('room_number')
-            self.instance.block = self.validated_data.get('block')
+            self.instance.capacity = self.validated_data.get('capacity', self.instance.capacity)
+            self.instance.room_number = self.validated_data.get('room_number', self.instance.room_number)
+            self.instance.block = self.validated_data.get('block', self.instance.block)
 
             self.instance.save()
             return self.instance
@@ -45,6 +45,18 @@ class HostelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hostel
         fields = ['id', 'name', 'contact_email', 'address', 'rooms']
+
+    
+    def save(self, **kwargs):
+        address = self.validated_data['address']
+        
+        if self.instance is not None:
+            pass
+        
+        else:
+            pass
+
+
 
     def create(self, validated_data):
         address_data = validated_data.pop('address')
