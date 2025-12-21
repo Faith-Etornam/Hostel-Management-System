@@ -49,12 +49,26 @@ class HostelSerializer(serializers.ModelSerializer):
 
     
     def save(self, **kwargs):
+
         address_data = self.validated_data.pop('address', None)
         
         if self.instance is not None:
-            pass
+
+            for atrr, value in self.validated_data.items():
+                setattr(self.instance, atrr, value)
+
+            if self.validated_data:
+                self.instance.save(update_fields=self.validated_data.keys())
+
+            # self.instance.name = self.validated_data.get('name', self.instance.name)
+            # self.instance.contact_email = self.validated_data.get('contact_email', self.instance.contact_email)
+            # self.instance.name = self.validated_data.get('name', self.instance.name)
+            # self.instance.name = self.validated_data.get('name', self.instance.name)
         
         else:
+            if not address_data:
+                raise serializers.ValidationError({'address': 'Address data is required'})
+            
             address = Address.objects.create(**address_data)
             self.instance = Hostel.objects.create(address=address, **self.validated_data)
             return self.instance
