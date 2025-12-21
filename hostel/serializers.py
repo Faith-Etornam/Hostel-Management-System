@@ -54,10 +54,11 @@ class HostelSerializer(serializers.ModelSerializer):
         
         if self.instance is not None:
 
-            for atrr, value in self.validated_data.items():
-                setattr(self.instance, atrr, value)
-
             if self.validated_data:
+
+                for attrr, value in self.validated_data.items():
+                    setattr(self.instance, attr, value)
+
                 self.instance.save(update_fields=self.validated_data.keys())
 
             if address_data:
@@ -101,11 +102,23 @@ class UpdateStudentSerializer(serializers.ModelSerializer):
         fields = ['user', 'contact_info']
 
     def update(self, instance, validated_data):
-        user_data = validated_data.pop('user')
-        get_user_model().objects.filter(pk=instance.user.pk).update(**user_data)
-        Student.objects.filter(pk=instance.pk).update(**validated_data)
-        instance.refresh_from_db()
+        user_data = self.validated_data.pop('user')
+        
+        if self.validated_data:
+            for attr, value in self.validated_data.items():
+                setattr(instance, attr, value)
+
+            instance.save(update_fields=validated_data.keys())
+        
+        if user_data:
+            user = instance.user
+            for attr, value in user_data.items():
+                setattr(user, attr, value)
+
+            user.save(update_fields=user_data.keys())
+
         return instance
+
 
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer()

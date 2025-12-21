@@ -4,6 +4,7 @@ from .views import HostelViewSet, StudentViewSet, RoomViewSet
 from pprint import pprint
 
 router = routers.DefaultRouter()
+
 router.register('hostels', HostelViewSet, basename='hostel')
 router.register('students', StudentViewSet, basename='students')
 
