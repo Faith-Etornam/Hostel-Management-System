@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -27,7 +28,12 @@ class RoomViewSet(ModelViewSet):
     @action(detail=True, methods=['post'])
     def assign(self, request, pk=None, hostel_pk=None):
         room = self.get_object()
-        serializer = Room
+        serializer = RoomAssignmentSerializer(data=request.data)
+        if serializer.is_valid():
+            student = serializer.validated_data['student_id']
+        if not room.is_available:
+            return Response({'error': 'Room is full'}, status=status.HTTP_400_BAD_REQUEST)
+        student.room = room
 
     def get_queryset(self):
         if not Hostel.objects.filter(pk=self.kwargs['hostel_pk']).exists():
