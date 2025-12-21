@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Hostel, Address, Student, Room
+from django.db import IntegrityError
 from django.contrib.auth import get_user_model
 
 # Serializers concerning the Hostel System
@@ -104,28 +105,33 @@ class UpdateStudentSerializer(serializers.ModelSerializer):
         fields = ['user', 'contact_info']
 
     def update(self, instance, validated_data):
-        user_data = self.validated_data.pop('user')
+        user_data = validated_data.pop('user')
+
+        try:
         
-        if self.validated_data:
-            for attr, value in self.validated_data.items():
-                setattr(instance, attr, value)
+            if validated_data:
+                for attr, value in validated_data.items():
+                    setattr(instance, attr, value)
 
-            instance.save(update_fields=validated_data.keys())
+                instance.save(update_fields=validated_data.keys())
+            
+            if user_data:
+                user = instance.user
+                for attr, value in user_data.items():
+                    setattr(user, attr, value)
+
+                user.save(update_fields=user_data.keys())
+
+            return instance
         
-        if user_data:
-            user = instance.user
-            for attr, value in user_data.items():
-                setattr(user, attr, value)
-
-            user.save(update_fields=user_data.keys())
-
-        return instance
+        except IntegrityError:
+            raise serializers.ValidationError({'error': 'Account with this email already exists'})
 
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Student
-        fields = ['id', 'user', 'course', 'hostel', 'contact_info']
+        fields = ['id', 'user', 'course', 'contact_info']
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
