@@ -7,13 +7,17 @@ from django.contrib.auth import get_user_model
 class RoomSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     is_available = serializers.BooleanField(read_only=True)
+    prices = serializers.SerializerMethodField()
     class Meta:
         model = Room
-        fields = ['id', 'room_number', 'capacity', 'block', 'is_available']
+        fields = ['id', 'room_number', 'capacity', 'block', 'is_available', 'prices']
 
         extra_kwargs = {
             'room_number': {'validators': []}
         }
+
+    def get_prices(self, value):
+        pass
 
     def save(self, **kwargs):
 
