@@ -27,7 +27,7 @@ class RoomSerializer(serializers.ModelSerializer):
             self.instance.room_number = self.validated_data.get('room_number', self.instance.room_number)
             self.instance.block = self.validated_data.get('block', self.instance.block)
 
-            self.instance.save()
+            self.instance.save(update_fields=['capacity', 'room_number', 'block'])
             return self.instance
         
         else:
