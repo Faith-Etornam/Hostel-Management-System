@@ -60,10 +60,14 @@ class HostelSerializer(serializers.ModelSerializer):
             if self.validated_data:
                 self.instance.save(update_fields=self.validated_data.keys())
 
-            # self.instance.name = self.validated_data.get('name', self.instance.name)
-            # self.instance.contact_email = self.validated_data.get('contact_email', self.instance.contact_email)
-            # self.instance.name = self.validated_data.get('name', self.instance.name)
-            # self.instance.name = self.validated_data.get('name', self.instance.name)
+            if address_data:
+                address_instance = self.instance.address
+
+                for attr, value in address_data.items():
+                    setattr(address_instance, attr, value)
+
+                address_instance.save(update_fields=address_data.keys())
+            return self.instance
         
         else:
             if not address_data:
