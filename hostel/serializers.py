@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 
 # Serializers concerning the Hostel System
 class RoomSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Room
         fields = ['id', 'room_number', 'capacity', 'block']
@@ -26,8 +27,8 @@ class RoomSerializer(serializers.ModelSerializer):
             self.instance.capacity = self.validated_data.get('capacity', self.instance.capacity)
             self.instance.room_number = self.validated_data.get('room_number', self.instance.room_number)
             self.instance.block = self.validated_data.get('block', self.instance.block)
-
-            self.instance.save(update_fields=['capacity', 'room_number', 'block'])
+            
+            self.instance.save(update_fields=self.validated_data.keys())
             return self.instance
         
         else:
@@ -48,15 +49,15 @@ class HostelSerializer(serializers.ModelSerializer):
 
     
     def save(self, **kwargs):
-        address = self.validated_data['address']
+        address_data = self.validated_data.pop('address', None)
         
         if self.instance is not None:
             pass
         
         else:
-            pass
-
-
+            address = Address.objects.create(**address_data)
+            self.instance = Hostel.objects.create(address=address, **self.validated_data)
+            return self.instance
 
     def create(self, validated_data):
         address_data = validated_data.pop('address')
