@@ -19,12 +19,12 @@ class Hostel(models.Model):
         return self.name
     
 class RoomPricing(models.Model):
-    hostels = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name='prices')
+    hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name='prices')
     capacity = models.IntegerField(help_text="e.g. 1 for '1 in a room', 2 for '2 in a room'")
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
-        unique_together = [['hostels', 'capacity']]
+        unique_together = [['hostel', 'capacity']]
 
     def __str__(self):
         return f"{self.capacity} in a room - {self.price}"

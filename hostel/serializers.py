@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Hostel, Address, Student, Room, RoomAssignment
+from .models import Hostel, Address, Student, Room, RoomAssignment, RoomPricing
 from django.db import IntegrityError, transaction
 from django.contrib.auth import get_user_model
 
@@ -17,7 +17,11 @@ class RoomSerializer(serializers.ModelSerializer):
         }
 
     def get_prices(self, obj):
-        pass
+        try:
+            room_pricing = RoomPricing.objects.get(hostel=self.context['hostel_id'], capacity=obj.capacity)
+            return room_pricing.price
+        except RoomPricing.DoesNotExist:
+            return None
 
     def save(self, **kwargs):
 
