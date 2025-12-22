@@ -1,13 +1,12 @@
 from datetime import date
-from django.shortcuts import render, get_object_or_404
 from django.db import connection, reset_queries
+from django.db.models import Count
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.exceptions import NotFound
 from .models import Hostel, Student, Room, RoomAssignment, RoomPricing
-from django.db.models import Count
 from .serializers import HostelSerializer, StudentSerializer, UpdateStudentSerializer, RoomSerializer, RoomAssignmentSerializer
 # Create your views here.
 class HostelViewSet(ModelViewSet):
@@ -29,9 +28,12 @@ class RoomViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
 
     def get_queryset(self):
-        if not Hostel.objects.filter(pk=self.kwargs['hostel_pk']).exists():
-            raise NotFound('Hostel does not exist')
-        return Room.objects.select_related('hostel').filter(hostel=self.kwargs['hostel_pk'])
+        # if not Hostel.objects.filter(pk=self.kwargs['hostel_pk']).exists():
+        #     raise NotFound('Rooms do not exist')
+        
+        return Room.objects.select_related('hostel').\
+                    annotate(student_count=Count('room_assignment')).\
+                    filter(hostel=self.kwargs['hostel_pk'])
     
 
     def get_serializer_context(self):

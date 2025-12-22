@@ -8,6 +8,7 @@ class RoomSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     is_available = serializers.BooleanField(read_only=True)
     prices = serializers.SerializerMethodField()
+    is_available = serializers.SerializerMethodField()
 
     class Meta:
         model = Room
@@ -16,6 +17,14 @@ class RoomSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'room_number': {'validators': []}
         }
+
+    def get_is_available(self, obj):
+        count = getattr(obj, 'student_count', None)
+
+        if count is None:
+            count = obj.room_assignment.count()
+        
+        return count < obj.capacity
 
     def get_prices(self, obj):
         price_map = self.context.get('price_map')
