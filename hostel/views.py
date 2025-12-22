@@ -1,5 +1,6 @@
 from datetime import date
 from django.shortcuts import render, get_object_or_404
+from django.db import connection, reset_queries
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -32,6 +33,7 @@ class RoomViewSet(ModelViewSet):
             raise NotFound('Hostel does not exist')
         return Room.objects.select_related('hostel').filter(hostel=self.kwargs['hostel_pk'])
     
+
     def get_serializer_context(self):
         context = super().get_serializer_context()
 
@@ -43,6 +45,10 @@ class RoomViewSet(ModelViewSet):
         
             context['price_map'] = price_map
             context['hostel_id'] = hostel_id
+
+        print(f"--------------------------------------------------")
+        print(f"TOTAL QUERIES: {len(connection.queries)}")
+        print(f"--------------------------------------------------")
 
         return context
     
