@@ -35,6 +35,11 @@ class Room(models.Model):
     block = models.CharField(max_length=50, null=True)
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name='rooms')
 
+    @property
+    def is_available(self):
+        if hasattr(self, 'student_count'):
+            return self.student_count < self.capacity
+        return self.room_assignment.count() < self.capacity
 
 class RoomAssignment(models.Model):
     start_date = models.DateField()
