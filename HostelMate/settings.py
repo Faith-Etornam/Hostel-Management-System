@@ -138,15 +138,16 @@ INTERNAL_IPS = [
 ]
 
 REST_FRAMEWORK = {
+    'COERCE_DECIMAL_TO_STRING': False,
+    
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'COERCE_DECIMAL_TO_STRING': False
+    )
 }
 
 AUTH_USER_MODEL = 'core.User'
 
-AUTHENTICATION_BACKENDS= [
+AUTHENTICATION_BACKENDS = [
     'core.backends.EmailBackend',
 ]
 

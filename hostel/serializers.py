@@ -89,6 +89,7 @@ class HostelSerializer(serializers.ModelSerializer):
             
             address = Address.objects.create(**address_data)
             self.instance = Hostel.objects.create(address=address, **self.validated_data)
+            
             return self.instance
 
 # Serializers concerning the Users and students
