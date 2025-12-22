@@ -8,20 +8,21 @@ class RoomSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     is_available = serializers.BooleanField(read_only=True)
     prices = serializers.SerializerMethodField()
+    student_count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Room
-        fields = ['id', 'room_number', 'capacity', 'block', 'is_available', 'prices']
+        fields = ['id', 'room_number', 'capacity', 'block', 'is_available', 'prices', 'student_count']
 
         extra_kwargs = {
             'room_number': {'validators': []}
         }
 
     def get_prices(self, obj):
-        try:
-            room_pricing = RoomPricing.objects.get(hostel=self.context['hostel_id'], capacity=obj.capacity)
-            return room_pricing.price
-        except RoomPricing.DoesNotExist:
-            return None
+        price_map = self.context.get('price_map')
+
+        if price_map:
+            return price_map.get(obj.capacity)
 
     def save(self, **kwargs):
 
@@ -89,7 +90,7 @@ class HostelSerializer(serializers.ModelSerializer):
             
             address = Address.objects.create(**address_data)
             self.instance = Hostel.objects.create(address=address, **self.validated_data)
-            
+
             return self.instance
 
 # Serializers concerning the Users and students
