@@ -1,10 +1,11 @@
+from datetime import date
 from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.exceptions import NotFound
-from .models import Hostel, Student, Room
+from .models import Hostel, Student, Room, RoomAssignment
 from .serializers import HostelSerializer, StudentSerializer, UpdateStudentSerializer, RoomSerializer, RoomAssignmentSerializer
 # Create your views here.
 class HostelViewSet(ModelViewSet):
@@ -29,12 +30,23 @@ class RoomViewSet(ModelViewSet):
     def assign(self, request, pk=None, hostel_pk=None):
         room = self.get_object()
         serializer = RoomAssignmentSerializer(data=request.data)
-        if serializer.is_valid():
+
+        if serializer.is_valid(raise_exception=True):
             student = serializer.validated_data['student']
+
         if not room.is_available:
             return Response({'error': 'Room is full'}, status=status.HTTP_400_BAD_REQUEST)
         student.room = room
         student.save()
+
+        current_year = date.today().year
+        
+        start_date = date(current_year, 1, 20) 
+        
+        end_date = date(current_year, 9, 30)
+
+        RoomAssignment.objects.create(room=room, student=student, start_date=start_date, end_date=end_date)
+
         return Response({"status": f"Assigned to Room {room.room_number}"})
 
     def get_queryset(self):
@@ -44,5 +56,10 @@ class RoomViewSet(ModelViewSet):
     
     def get_serializer_context(self):
         return {'hostel_id': self.kwargs['hostel_pk']}
+    
+    def get_serializer_class(self):
+        if self.action == 'assign':
+            return RoomAssignmentSerializer
+        return super().get_serializer_class()
     
 
