@@ -72,7 +72,6 @@ class Payment(models.Model):
 class Student(models.Model):
     course = models.CharField(max_length=50)
     contact_info = models.CharField(max_length=10)
-    hostel = models.ForeignKey(Hostel, on_delete=models.SET_NULL, null=True)
-    room = models.OneToOneField(Room, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True, related_name='students')
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
