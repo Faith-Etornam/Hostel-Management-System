@@ -23,7 +23,6 @@ class RoomSerializer(serializers.ModelSerializer):
 
         if count is None:
             count = obj.room_assignment.count()
-        
         return count < obj.capacity
 
     def get_prices(self, obj):
@@ -55,6 +54,9 @@ class RoomSerializer(serializers.ModelSerializer):
             return self.instance
         
 class RoomAssignmentSerializer(serializers.ModelSerializer):
+    student = serializers.PrimaryKeyRelatedField(
+        queryset=Student.objects.select_related('user').all()
+    )
     class Meta:
         model = RoomAssignment
         fields = ['student']
