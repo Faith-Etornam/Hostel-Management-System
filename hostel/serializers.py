@@ -8,11 +8,10 @@ class RoomSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     is_available = serializers.BooleanField(read_only=True)
     prices = serializers.SerializerMethodField()
-    student_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Room
-        fields = ['id', 'room_number', 'capacity', 'block', 'is_available', 'prices', 'student_count']
+        fields = ['id', 'room_number', 'capacity', 'block', 'is_available', 'prices']
 
         extra_kwargs = {
             'room_number': {'validators': []}

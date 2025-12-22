@@ -37,10 +37,10 @@ class RoomViewSet(ModelViewSet):
 
         if 'hostel_pk' in self.kwargs:
             hostel_id = self.kwargs['hostel_pk']
-          
-            prices = RoomPricing.objects.filter(hostel=hostel_id)
 
+            prices = RoomPricing.objects.filter(hostel=hostel_id)
             price_map = {p.capacity: p.price for p in prices}
+        
             context['price_map'] = price_map
             context['hostel_id'] = hostel_id
 
