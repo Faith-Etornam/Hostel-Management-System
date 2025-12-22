@@ -30,10 +30,12 @@ class RoomViewSet(ModelViewSet):
         room = self.get_object()
         serializer = RoomAssignmentSerializer(data=request.data)
         if serializer.is_valid():
-            student = serializer.validated_data['student_id']
+            student = serializer.validated_data['student']
         if not room.is_available:
             return Response({'error': 'Room is full'}, status=status.HTTP_400_BAD_REQUEST)
         student.room = room
+        student.save()
+        return Response({"status": f"Assigned to Room {room.room_number}"})
 
     def get_queryset(self):
         if not Hostel.objects.filter(pk=self.kwargs['hostel_pk']).exists():
