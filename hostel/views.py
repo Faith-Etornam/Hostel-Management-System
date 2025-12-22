@@ -1,5 +1,4 @@
 from datetime import date
-from django.db import connection, reset_queries
 from django.db.models import Count
 from rest_framework import status
 from rest_framework.decorators import action
@@ -28,14 +27,13 @@ class RoomViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
 
     def get_queryset(self):
-        # if not Hostel.objects.filter(pk=self.kwargs['hostel_pk']).exists():
-        #     raise NotFound('Rooms do not exist')
+        if not Hostel.objects.filter(pk=self.kwargs['hostel_pk']).exists():
+            raise NotFound('Rooms do not exist')
         
         return Room.objects.select_related('hostel').\
                     annotate(student_count=Count('room_assignment')).\
                     filter(hostel=self.kwargs['hostel_pk'])
     
-
     def get_serializer_context(self):
         context = super().get_serializer_context()
 
@@ -47,10 +45,6 @@ class RoomViewSet(ModelViewSet):
         
             context['price_map'] = price_map
             context['hostel_id'] = hostel_id
-
-        print(f"--------------------------------------------------")
-        print(f"TOTAL QUERIES: {len(connection.queries)}")
-        print(f"--------------------------------------------------")
 
         return context
     
