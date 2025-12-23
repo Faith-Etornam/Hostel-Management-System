@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Hostel, Address, Student, Room, RoomAssignment, RoomPricing
+from .models import Hostel, Address, Student, Room, RoomAssignment
 from django.db import IntegrityError, transaction
 from django.contrib.auth import get_user_model
 
