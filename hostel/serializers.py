@@ -57,7 +57,7 @@ class RoomSerializer(serializers.ModelSerializer):
                     return serializers.ValidationError({'error': f"Hostel {hostel_id} does not exist"})
                 
                 if hostel.rooms.count() >= hostel.number_of_rooms:
-                    return serializers.ValidationError({'error': f"Room limit reached! Max allowed: {hostel.total_rooms}"})
+                    raise serializers.ValidationError({'error': f"Room limit reached! Max allowed: {hostel.number_of_rooms}"})
                 
                 self.instance = Room.objects.create(hostel_id=hostel_id, **self.validated_data)
                 return self.instance
