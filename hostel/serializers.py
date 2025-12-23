@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db import transaction
 from .models import Hostel, Address, Student, Room, RoomAssignment
 from django.db import IntegrityError, transaction
 from django.contrib.auth import get_user_model
@@ -6,7 +7,6 @@ from django.contrib.auth import get_user_model
 # Serializers concerning the Hostel System
 class RoomSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    is_available = serializers.BooleanField(read_only=True)
     prices = serializers.SerializerMethodField()
     is_available = serializers.SerializerMethodField()
 
@@ -50,8 +50,17 @@ class RoomSerializer(serializers.ModelSerializer):
             return self.instance
         
         else:
-            self.instance = Room.objects.create(hostel_id=hostel_id, **self.validated_data)
-            return self.instance
+            with transaction.atomic():
+                try:
+                    hostel = Hostel.objects.select_for_update().get(id=hostel_id)
+                except Hostel.DoesNotExist:
+                    return serializers.ValidationError({'error': f"Hostel {hostel_id} does not exist"})
+                
+                if hostel.rooms.count() >= hostel.number_of_rooms:
+                    return serializers.ValidationError({'error': f"Room limit reached! Max allowed: {hostel.total_rooms}"})
+                
+                self.instance = Room.objects.create(hostel_id=hostel_id, **self.validated_data)
+                return self.instance
         
 class RoomAssignmentSerializer(serializers.ModelSerializer):
     student = serializers.PrimaryKeyRelatedField(
