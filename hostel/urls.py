@@ -1,5 +1,9 @@
 from rest_framework_nested import routers
-from .views import HostelViewSet, StudentViewSet, RoomViewSet
+from .views import (
+    HostelViewSet, 
+    StudentViewSet, 
+    RoomViewSet
+)
 
 router = routers.DefaultRouter()
 

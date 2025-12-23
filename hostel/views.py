@@ -5,8 +5,20 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from .models import Hostel, Student, Room, RoomAssignment, RoomPricing
-from .serializers import HostelSerializer, StudentSerializer, UpdateStudentSerializer, RoomSerializer, RoomAssignmentSerializer
+from .models import (
+    Hostel, 
+    Student, 
+    Room, 
+    RoomAssignment, 
+    RoomPricing
+)
+from .serializers import (
+    HostelSerializer, 
+    StudentSerializer, 
+    UpdateStudentSerializer, 
+    RoomSerializer, 
+    RoomAssignmentSerializer
+)
 # Create your views here.
 class HostelViewSet(ModelViewSet):
     queryset = Hostel.objects.select_related('address').all()

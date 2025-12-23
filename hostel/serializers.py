@@ -1,8 +1,13 @@
-from rest_framework import serializers
-from django.db import transaction
-from .models import Hostel, Address, Student, Room, RoomAssignment
 from django.db import IntegrityError, transaction
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
+from .models import (
+    Address, 
+    Hostel, 
+    Student, 
+    RoomAssignment,
+    Room
+)
 
 # Serializers concerning the Hostel System
 class RoomSerializer(serializers.ModelSerializer):
