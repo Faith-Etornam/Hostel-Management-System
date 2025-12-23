@@ -36,7 +36,7 @@ class Room(models.Model):
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name='rooms')
 
     class Meta:
-        unique_together = ['hostel', 'room_number']
+        unique_together = [['hostel', 'room_number']]
 
     @property
     def is_available(self):
