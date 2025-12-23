@@ -30,10 +30,13 @@ class RoomPricing(models.Model):
         return f"{self.capacity} in a room - {self.price}"
 
 class Room(models.Model):
-    room_number = models.CharField(max_length=10, unique=True)
+    room_number = models.CharField(max_length=10)
     capacity = models.IntegerField(validators=[MinValueValidator(1)])
     block = models.CharField(max_length=50, null=True)
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name='rooms')
+
+    class Meta:
+        unique_together = ['hostel', 'room_number']
 
     @property
     def is_available(self):
