@@ -5,24 +5,26 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
 from .models import (
     Hostel, 
     Student, 
-    Room, 
     RoomAssignment, 
-    RoomPricing
+    RoomPricing,
+    Room
 )
 from .serializers import (
     HostelSerializer, 
     StudentSerializer, 
     UpdateStudentSerializer, 
+    RoomAssignmentSerializer,
     RoomSerializer, 
-    RoomAssignmentSerializer
 )
 # Create your views here.
 class HostelViewSet(ModelViewSet):
     queryset = Hostel.objects.select_related('address').all()
     serializer_class = HostelSerializer
+    permission_classes = []
 
 class StudentViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
