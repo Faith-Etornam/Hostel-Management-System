@@ -1,5 +1,6 @@
 from django.db import IntegrityError, transaction
 from django.contrib.auth import get_user_model
+from djoser.serializers import UserSerializer as BaseUserSerializer
 from rest_framework import serializers
 from .models import (
     Address, 
@@ -177,6 +178,17 @@ class StudentSerializer(serializers.ModelSerializer):
             user = get_user_model().objects.create_user(**user_data)
             student = Student.objects.create(**validated_data, user=user)
         return student
+    
+
+class CustomUserSerializer(BaseUserSerializer):
+    student_profile = serializers.SerializerMethodField()
+
+    class Meta(BaseUserSerializer.Meta):
+        model = get_user_model()
+        fields = BaseUserSerializer.Meta.fields + ('first_name', 'last_name', 'student_profile')
+
+    def get_student_profile(self, obj):
+        if hasattr(obj, 'student')
 
 
 

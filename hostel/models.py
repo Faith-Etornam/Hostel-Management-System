@@ -78,7 +78,7 @@ class Student(models.Model):
     course = models.CharField(max_length=50)
     contact_info = models.CharField(max_length=10)
     room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True, related_name='students')
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='student')
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"
