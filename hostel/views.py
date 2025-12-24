@@ -36,13 +36,15 @@ class HostelViewSet(ModelViewSet):
 class StudentViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
     queryset = Student.objects.select_related('user').all()
-    permission_classes = [IsOwnerOrAdmin]
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
 
     def get_permissions(self):
         if self.action in ['list']:
             permission_classes = [IsAdminUser]
         elif self.action == 'create':
             permission_classes = [AllowAny]
+        else:
+            permission_classes = self.permission_classes
         return [permission() for permission in permission_classes]
         
     def get_serializer_class(self):
