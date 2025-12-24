@@ -6,6 +6,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from .permissions import IsOwnerOrAdmin
 from .models import (
     Hostel, 
     Student, 
@@ -24,7 +25,6 @@ from .serializers import (
 class HostelViewSet(ModelViewSet):
     queryset = Hostel.objects.select_related('address').all()
     serializer_class = HostelSerializer
-    permission_classes = []
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
@@ -35,8 +35,12 @@ class HostelViewSet(ModelViewSet):
 
 class StudentViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
-
+    permission_classes = [IsOwnerOrAdmin]
     queryset = Student.objects.select_related('user').all()
+
+    # def get_permissions(self):
+    #     if self.action in ['post']:
+        
 
     def get_serializer_class(self):
         if self.request.method == 'PATCH':
