@@ -191,9 +191,9 @@ class CustomUserSerializer(BaseUserSerializer):
 
     class Meta(BaseUserSerializer.Meta):
         model = get_user_model()
-        fields = BaseUserSerializer.Meta.fields + ('profile')
+        fields = BaseUserSerializer.Meta.fields + ('first_name', 'last_name', 'profile',)
 
-    def get_student_profile(self, obj):
+    def get_profile(self, obj):
         if hasattr(obj, 'student'):
             return StudentProfileSerializer(obj.student).data
 
