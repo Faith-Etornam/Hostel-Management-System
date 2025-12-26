@@ -19,7 +19,7 @@ from .serializers import (
     StudentSerializer, 
     UpdateStudentSerializer, 
     RoomAssignmentSerializer,
-    RoomSerializer, 
+    RoomSerializer 
 )
 # Create your views here.
 class HostelViewSet(ModelViewSet):

@@ -168,6 +168,7 @@ class UpdateStudentSerializer(serializers.ModelSerializer):
 
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Student
         fields = ['id', 'user', 'course', 'contact_info']
@@ -185,10 +186,11 @@ class CustomUserSerializer(BaseUserSerializer):
 
     class Meta(BaseUserSerializer.Meta):
         model = get_user_model()
-        fields = BaseUserSerializer.Meta.fields + ('first_name', 'last_name', 'student_profile')
+        fields = BaseUserSerializer.Meta.fields + ('student_profile',)
 
     def get_student_profile(self, obj):
-        if hasattr(obj, 'student')
+        if hasattr(obj, 'student'):
+            return StudentSerializer(obj.student).data
 
 
 
