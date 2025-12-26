@@ -187,15 +187,15 @@ class StudentProfileSerializer(serializers.ModelSerializer):
         fields = ['course', 'contact_info', 'room']
 
 class CustomUserSerializer(BaseUserSerializer):
-    student_profile = serializers.SerializerMethodField()
+    profile = serializers.SerializerMethodField()
 
     class Meta(BaseUserSerializer.Meta):
         model = get_user_model()
-        fields = BaseUserSerializer.Meta.fields + ('student_profile',)
+        fields = BaseUserSerializer.Meta.fields + ('profile')
 
     def get_student_profile(self, obj):
         if hasattr(obj, 'student'):
-            return StudentSerializer(obj.student).data
+            return StudentProfileSerializer(obj.student).data
 
 
 
