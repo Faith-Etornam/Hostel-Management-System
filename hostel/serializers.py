@@ -180,6 +180,11 @@ class StudentSerializer(serializers.ModelSerializer):
             student = Student.objects.create(**validated_data, user=user)
         return student
     
+class StudentProfileSerializer(serializers.ModelSerializer):
+    room = serializers.CharField(read_only=True)
+    class Meta:
+        model = Student
+        fields = ['course', 'contact_info', 'room']
 
 class CustomUserSerializer(BaseUserSerializer):
     student_profile = serializers.SerializerMethodField()
