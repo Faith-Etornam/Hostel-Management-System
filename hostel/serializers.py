@@ -187,7 +187,7 @@ class StudentProfileSerializer(serializers.ModelSerializer):
         fields = ['course', 'contact_info', 'room']
 
 class CustomUserSerializer(BaseUserSerializer):
-    profile = serializers.SerializerMethodField()
+    profile = StudentProfileSerializer(source='student', required=False)
 
     class Meta(BaseUserSerializer.Meta):
         model = get_user_model()
@@ -196,6 +196,19 @@ class CustomUserSerializer(BaseUserSerializer):
     def get_profile(self, obj):
         if hasattr(obj, 'student'):
             return StudentProfileSerializer(obj.student).data
+        
+    def update(self, instance, validated_data):
+        student_data = validated_data.pop('student', None)
+
+        instance = super().update(instance, validated_data)
+
+        if student_data and hasattr(instance, 'student'):
+            student = instance.student
+            for attr, value in student_data.items():
+                setattr(student, attr, value)
+            student.save()
+
+        return instance
 
 
 
