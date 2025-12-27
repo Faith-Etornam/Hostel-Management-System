@@ -12,14 +12,16 @@ from .models import (
     Student, 
     RoomAssignment, 
     RoomPricing,
-    Room
+    Room, 
+    Payment
 )
 from .serializers import (
     HostelSerializer, 
     StudentSerializer, 
     UpdateStudentSerializer, 
     RoomAssignmentSerializer,
-    RoomSerializer 
+    RoomSerializer,
+    PaymentSerializer
 )
 # Create your views here.
 class HostelViewSet(ModelViewSet):
@@ -116,6 +118,10 @@ class RoomViewSet(ModelViewSet):
         RoomAssignment.objects.create(room=room, student=student, start_date=start_date, end_date=end_date)
 
         return Response({"status": f"Assigned to Room {room.room_number}"})
+
+class PaymentViewSet(ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
 
     
 
