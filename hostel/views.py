@@ -120,8 +120,19 @@ class RoomViewSet(ModelViewSet):
         return Response({"status": f"Assigned to Room {room.room_number}"})
 
 class PaymentViewSet(ModelViewSet):
-    queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
+    permission_classes = [IsAuthenticated]
 
-    
+    def get_permissions(self):
+        user = self.request.user
+
+        if user.is_staff:
+            return Payment.objects.all()
+        
+        if hasattr(user, 'student'):
+            return Payment.objects.filter(student=user.student)
+        
+        return Payment.objects.none()
+
+
 
