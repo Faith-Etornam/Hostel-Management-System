@@ -89,7 +89,6 @@ class Payment(models.Model):
         (PAYMENT_TYPE_FEES, 'Additional Fees')
     ]
     
-    
     amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
     payment_date = models.DateField()
     payment_type = models.CharField(max_length=10, choices=PAYMENT_TYPES, default=PAYMENT_TYPE_RENT)
