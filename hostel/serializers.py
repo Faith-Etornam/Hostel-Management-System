@@ -3,11 +3,13 @@ from django.contrib.auth import get_user_model
 from djoser.serializers import UserSerializer as BaseUserSerializer
 from rest_framework import serializers
 from .models import (
-    Address, 
+    Address,
+    Fee, 
     Hostel, 
     Student, 
     RoomAssignment,
-    Room
+    Room,
+    Payment
 )
 
 # Serializers concerning the Hostel System
@@ -206,6 +208,14 @@ class CustomUserSerializer(BaseUserSerializer):
             student.save()
 
         return instance
+    
+
+# Payment and Fees Serializers
+
+class Payment(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = []
     
     
     
