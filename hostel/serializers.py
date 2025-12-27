@@ -209,13 +209,18 @@ class CustomUserSerializer(BaseUserSerializer):
 
         return instance
     
-
 # Payment and Fees Serializers
 
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = ['amount_paid', 'payment_date', 'status', 'fee']
+
+class FeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fee
+        fields = ['name', 'amount', 'due_date', 'fee_type']
+
     
     
     

@@ -8,6 +8,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from .permissions import IsOwnerOrAdmin
 from .models import (
+    Fee,
     Hostel, 
     Student, 
     RoomAssignment, 
@@ -16,6 +17,7 @@ from .models import (
     Payment
 )
 from .serializers import (
+    FeeSerializer,
     HostelSerializer, 
     StudentSerializer, 
     UpdateStudentSerializer, 
@@ -134,5 +136,8 @@ class PaymentViewSet(ReadOnlyModelViewSet):
         
         return Payment.objects.none()
 
+class FeeViewSet(ModelViewSet):
+    serializer_class = FeeSerializer
+    queryset = Fee.objects.all()
 
 
