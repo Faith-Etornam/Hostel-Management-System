@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from .permissions import IsOwnerOrAdmin
 from .models import (
@@ -119,11 +119,11 @@ class RoomViewSet(ModelViewSet):
 
         return Response({"status": f"Assigned to Room {room.room_number}"})
 
-class PaymentViewSet(ModelViewSet):
+class PaymentViewSet(ReadOnlyModelViewSet):
     serializer_class = PaymentSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_permissions(self):
+    def  get_queryset(self):
         user = self.request.user
 
         if user.is_staff:
