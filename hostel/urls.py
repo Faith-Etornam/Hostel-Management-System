@@ -2,6 +2,7 @@ from rest_framework_nested import routers
 from .views import (
     FeeViewSet,
     HostelViewSet, 
+    HostelManagerViewSet,
     StudentViewSet, 
     RoomViewSet,
     PaymentViewSet
@@ -13,6 +14,7 @@ router.register('hostels', HostelViewSet, basename='hostel')
 router.register('students', StudentViewSet, basename='students')
 router.register('payments', PaymentViewSet, basename='payments')
 router.register('fees', FeeViewSet, basename='fees')
+router.register('hostel_managers', HostelManagerViewSet, basename='managers')
 
 room_router = routers.NestedDefaultRouter(router, 'hostels', lookup='hostel')
 room_router.register('rooms', RoomViewSet, basename='hostel-rooms')
