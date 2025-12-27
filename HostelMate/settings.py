@@ -161,6 +161,7 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
     'SERIALIZERS': {
         'current_user': 'hostel.serializers.CustomUserSerializer',
+        'user': 'hostel.serializers.CustomUserSerializer',
     }
 }
 

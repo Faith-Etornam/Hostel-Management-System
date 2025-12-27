@@ -54,7 +54,17 @@ class StudentViewSet(ModelViewSet):
     
 class RoomViewSet(ModelViewSet):
     serializer_class = RoomSerializer
+    permission_classes = [IsAuthenticated]
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            permission_classes = [AllowAny]
+        elif self.action in ['create', 'update', 'partial_update', 'destroy']:
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = self.permission_classes
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         if not Hostel.objects.filter(pk=self.kwargs['hostel_pk']).exists():

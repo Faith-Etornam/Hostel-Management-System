@@ -182,6 +182,7 @@ class StudentSerializer(serializers.ModelSerializer):
     
 class StudentProfileSerializer(serializers.ModelSerializer):
     room = serializers.CharField(read_only=True)
+    course = serializers.CharField(read_only=True)
     class Meta:
         model = Student
         fields = ['course', 'contact_info', 'room']
@@ -192,10 +193,6 @@ class CustomUserSerializer(BaseUserSerializer):
     class Meta(BaseUserSerializer.Meta):
         model = get_user_model()
         fields = BaseUserSerializer.Meta.fields + ('first_name', 'last_name', 'profile',)
-
-    def get_profile(self, obj):
-        if hasattr(obj, 'student'):
-            return StudentProfileSerializer(obj.student).data
         
     def update(self, instance, validated_data):
         student_data = validated_data.pop('student', None)
@@ -209,6 +206,10 @@ class CustomUserSerializer(BaseUserSerializer):
             student.save()
 
         return instance
+    
+    
+    
+
 
 
 
