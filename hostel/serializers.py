@@ -6,6 +6,7 @@ from .models import (
     Address,
     Fee, 
     Hostel, 
+    HostelManager,
     Student, 
     RoomAssignment,
     Room,
@@ -220,6 +221,16 @@ class FeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fee
         fields = ['name', 'amount', 'due_date', 'fee_type', 'hostel']
+
+class HostelManagerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HostelManager
+        fields = ['id', 'user', 'phone', 'location']
+
+    def validate_user(self, value):
+        if hasattr(value, 'student'):
+            raise serializers.ValidationError({'error': 'This user is a student and cannot be a hostel manager'})
+        return value
 
     
     
