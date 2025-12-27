@@ -80,9 +80,19 @@ class Payment(models.Model):
         (PAYMENT_STATUS_COMPLETED, 'Completed'),
         (PAYMENT_STATUS_FAILED, 'Failed')
     ]
+
+    PAYMENT_TYPE_RENT = 'RENT'
+    PAYMENT_TYPE_FEES = 'FEES'
+
+    PAYMENT_TYPES = [
+        (PAYMENT_TYPE_RENT, 'Hostel rent'),
+        (PAYMENT_TYPE_FEES, 'Additional Fees')
+    ]
+    
     
     amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
     payment_date = models.DateField()
+    payment_type = models.CharField(max_length=10, choices=PAYMENT_TYPES, default=PAYMENT_TYPE_RENT)
     status = models.CharField(max_length=1, choices=PAYMENT_STATUS, default=PAYMENT_STATUS_PENDING)
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     fee = models.ForeignKey(Fee, on_delete=models.SET_NULL, null=True)
