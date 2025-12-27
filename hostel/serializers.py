@@ -225,7 +225,7 @@ class FeeSerializer(serializers.ModelSerializer):
 class HostelManagerSerializer(serializers.ModelSerializer):
     class Meta:
         model = HostelManager
-        fields = ['id', 'user', 'phone', 'location']
+        fields = ['id', 'user', 'phone_number', 'location']
 
     def validate_user(self, value):
         if hasattr(value, 'student'):
