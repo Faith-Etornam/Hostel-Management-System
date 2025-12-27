@@ -74,7 +74,7 @@ class Payment(models.Model):
     payment_date = models.DateField()
     status = models.CharField(max_length=1, choices=PAYMENT_STATUS, default=PAYMENT_STATUS_PENDING)
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    fee = models.ForeignKey(Fee, on_delete=models.SET_NULL)
+    fee = models.ForeignKey(Fee, on_delete=models.SET_NULL, null=True)
 
 class Student(models.Model):
     course = models.CharField(max_length=50)
