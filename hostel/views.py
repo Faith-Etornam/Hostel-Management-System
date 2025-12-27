@@ -10,6 +10,7 @@ from .permissions import IsOwnerOrAdmin
 from .models import (
     Fee,
     Hostel, 
+    HostelManager,
     Student, 
     RoomAssignment, 
     RoomPricing,
@@ -19,6 +20,7 @@ from .models import (
 from .serializers import (
     FeeSerializer,
     HostelSerializer, 
+    HostelManagerSerializer,
     StudentSerializer, 
     UpdateStudentSerializer, 
     RoomAssignmentSerializer,
@@ -141,4 +143,9 @@ class FeeViewSet(ModelViewSet):
     serializer_class = FeeSerializer
     permission_classes = [IsAdminUser]
 
+
+class HostelManagerViewSet(ModelViewSet):
+    queryset = HostelManager.objects.all()
+    permission_classes = [IsAdminUser]
+    serializer_class = HostelManagerSerializer
 
