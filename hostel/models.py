@@ -104,3 +104,13 @@ class Student(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"
+    
+
+class HostelManager(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='manager')
+    phone_number = models.CharField(max_length=10)
+    hostel = models.ForeignKey(Hostel, on_delete=models.SET_NULL, null=True, related_name='managers')
+    location = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"Manager: {self.user.first_name}"

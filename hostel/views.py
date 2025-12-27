@@ -137,7 +137,8 @@ class PaymentViewSet(ReadOnlyModelViewSet):
         return Payment.objects.none()
 
 class FeeViewSet(ModelViewSet):
-    serializer_class = FeeSerializer
     queryset = Fee.objects.all()
+    serializer_class = FeeSerializer
+    permission_classes = [IsAdminUser]
 
 

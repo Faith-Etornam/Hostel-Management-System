@@ -219,7 +219,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 class FeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fee
-        fields = ['name', 'amount', 'due_date', 'fee_type']
+        fields = ['name', 'amount', 'due_date', 'fee_type', 'hostel']
 
     
     
