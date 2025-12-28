@@ -11,6 +11,7 @@ django-debug-toolbar = "*"
 djoser = "*"
 djangorestframework-simplejwt = "*"
 drf-nested-routers = "*"
+requests = "*"
 
 [dev-packages]
 
