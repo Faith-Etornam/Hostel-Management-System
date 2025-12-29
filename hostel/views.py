@@ -130,7 +130,15 @@ class PaymentViewSet(ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['post'])
+
+
     def verify(self, request):
+        
+        if not hasattr(request.user, 'student'):
+            return Response(
+                {"error": "Access Denied. Only registered students can make payments."}, 
+                status=403
+            )
         reference = request.data.get('reference')
         fee_id = request.data.get('fee_id')
 
