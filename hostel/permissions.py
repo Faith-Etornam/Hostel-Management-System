@@ -6,3 +6,10 @@ class IsOwnerOrAdmin(BasePermission):
             return True
         
         return obj.user == request.user
+    
+class IsHostelManager(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and hasattr(request.user, 'manager')
+
+    def has_object_permission(self, request, view, obj):
+        manager_hostel = request.user
