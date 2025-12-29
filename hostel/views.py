@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from hostel.paystack import Paystack
-from .permissions import IsOwnerOrAdmin
+from .permissions import IsHostelManager, IsOwnerOrAdmin
 from .models import (
     Fee,
     Hostel, 
@@ -69,7 +69,7 @@ class RoomViewSet(ModelViewSet):
         if self.action in ['list', 'retrieve']:
             permission_classes = [AllowAny]
         elif self.action in ['create', 'update', 'partial_update', 'destroy']:
-            permission_classes = [IsAdminUser]
+            permission_classes = [IsHostelManager]
         else:
             permission_classes = self.permission_classes
         return [permission() for permission in permission_classes]
@@ -133,7 +133,7 @@ class PaymentViewSet(ReadOnlyModelViewSet):
 
 
     def verify(self, request):
-        
+
         if not hasattr(request.user, 'student'):
             return Response(
                 {"error": "Access Denied. Only registered students can make payments."}, 
