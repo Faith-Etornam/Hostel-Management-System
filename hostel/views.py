@@ -127,6 +127,11 @@ class PaymentViewSet(ReadOnlyModelViewSet):
     serializer_class = PaymentSerializer
     permission_classes = [IsAuthenticated]
 
+    @action(detail=False, methods=['post'])
+    def verify(self, request):
+        reference = request.data.get('reference')
+        fee_id = 
+
     def  get_queryset(self):
         user = self.request.user
 
