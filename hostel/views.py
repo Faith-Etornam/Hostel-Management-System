@@ -186,7 +186,6 @@ class FeeViewSet(ModelViewSet):
     serializer_class = FeeSerializer
     permission_classes = [IsAdminUser]
 
-
 class HostelManagerViewSet(ModelViewSet):
     queryset = HostelManager.objects.select_related('hostel', 'user').all()
     permission_classes = [IsAdminUser]
