@@ -155,12 +155,13 @@ class PaymentViewSet(ReadOnlyModelViewSet):
                     payment_type = 'FEE'
 
                 Payment.objects.create(
-                    student=request.user.student,
+                    student=request.user,
                     amount_paid=amount_paid,
                     reference=reference,
                     status=Payment.PAYMENT_STATUS_COMPLETED,
                     fee=fee_obj,
-                    payment_type=payment_type
+                    payment_type=payment_type,
+                    payment_date = date.today()
                 )
 
                 return Response({"message": "Payment Verified", "amount": amount_paid})
