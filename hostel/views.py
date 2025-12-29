@@ -130,7 +130,15 @@ class PaymentViewSet(ReadOnlyModelViewSet):
     @action(detail=False, methods=['post'])
     def verify(self, request):
         reference = request.data.get('reference')
-        fee_id = 
+        fee_id = request.data.get('fee_id')
+
+        if not reference:
+            return  Response({'error': "No reference provided"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if Payment.objects.filter(reference=reference).exists():
+            return Response({'error': "Payment already processed"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        
 
     def  get_queryset(self):
         user = self.request.user
