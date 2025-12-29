@@ -1,11 +1,13 @@
 from datetime import date
 from django.db.models import Count 
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from hostel.paystack import Paystack
 from .permissions import IsOwnerOrAdmin
 from .models import (
     Fee,
@@ -138,7 +140,35 @@ class PaymentViewSet(ReadOnlyModelViewSet):
         if Payment.objects.filter(reference=reference).exists():
             return Response({'error': "Payment already processed"}, status=status.HTTP_400_BAD_REQUEST)
         
-        
+        paystack = Paystack()
+        status, result = paystack.verify_payment(reference)
+
+        if status:
+            if result['status'] == 'success':
+                amount_paid = result['amount'] / 100
+
+                fee_obj = None
+                payment_type = 'RENT'
+
+                if fee_id:
+                    fee_obj = get_object_or_404(Fee, pk=fee_id)
+                    payment_type = 'FEE'
+
+                Payment.objects.create(
+                    student=request.user.student,
+                    amount_paid=amount_paid,
+                    reference=reference,
+                    status=Payment.PAYMENT_STATUS_COMPLETED,
+                    fee=fee_obj,
+                    payment_type=payment_type
+                )
+
+                return Response({"message": "Payment Verified", "amount": amount_paid})
+            
+            else:
+                return Response({"error": "Payment failed or declined"}, status=400)
+        else:
+            return Response({"error": result}, status=400)
 
     def  get_queryset(self):
         user = self.request.user
