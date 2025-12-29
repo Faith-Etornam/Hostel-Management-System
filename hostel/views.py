@@ -7,8 +7,9 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from rest_framework.exceptions import PermissionDenied
 from hostel.paystack import Paystack
-from .permissions import IsHostelManager, IsOwnerOrAdmin
+from .permissions import IsOwnerOrAdmin, IsHostelManager
 from .models import (
     Fee,
     Hostel, 
@@ -65,7 +66,24 @@ class RoomViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
 
+    def perform_create(self, serializer):
+        user = self.request.user
+
+        if hasattr(user, 'manager'):
+            manager_hostel = user.manager.hostel
+
+            if not manager_hostel:
+                raise PermissionDenied('You are not assigned to manage any hostel.')
+            
+            url_hostel_id = str(self.kwargs.get('hostel_pk'))
+            
+            if url_hostel_id != str(manager_hostel.id):
+                raise PermissionDenied(f"You cannot add rooms to Hostel {url_hostel_id}. You manage {manager_hostel.name}.")
+            
+            serializer.save(hostel=manager_hostel)
+
     def get_permissions(self):
+
         if self.action in ['list', 'retrieve']:
             permission_classes = [AllowAny]
         elif self.action in ['create', 'update', 'partial_update', 'destroy']:
