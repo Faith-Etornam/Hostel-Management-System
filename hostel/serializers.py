@@ -126,11 +126,18 @@ class HostelSerializer(serializers.ModelSerializer):
 class RoomPricingSerializer(serializers.ModelSerializer):
     class Meta:
         model = RoomPricing
-        fields = ['capacity', "price"]
+        fields = ['id', 'capacity', "price"]
 
     def create(self, validated_data):
         hostel_id = self.context.get('hostel_id')
-        return RoomPricing.objects.create(hostel=hostel_id, **validated_data)
+        try:
+
+            return RoomPricing.objects.create(hostel=hostel_id, **validated_data)
+        
+        except IntegrityError:
+            raise serializers.ValidationError({
+                "capacity": ["A pricing entry for this capacity already exists."]
+            })
 
 
 # Serializers concerning the Users and students
