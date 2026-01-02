@@ -27,7 +27,6 @@
 
 ### Database Schema (ERD)
 ![Database Schema](docs/erd_diagram.png)
-*(Note: Upload your ERD image to a 'docs' folder and link it here)*
 
 ### Payment Flow
 1. **Student** requests payment link (`/initialize`).
