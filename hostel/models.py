@@ -114,4 +114,4 @@ class HostelManager(models.Model):
     location = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"Manager: {self.user.first_name}"
+        return f"Manager: {self.user.first_name} {self.user.last_name}"

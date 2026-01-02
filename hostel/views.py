@@ -134,7 +134,7 @@ class RoomViewSet(ModelViewSet):
         student.room = room
         student.save()
 
-        current_year = date.today().year + 1
+        current_year = date.today().year
         
         start_date = date(current_year, 1, 20) 
         
