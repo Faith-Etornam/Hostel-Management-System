@@ -63,21 +63,16 @@
 3. ### Install Dependencies
     pip install -r requirements.txt
 
-4. ### Environment Configuration
-# Django Settings
-SECRET_KEY=your_django_secret_key_here
-DEBUG=True
+4. ### Django Settings
+   SECRET_KEY=your_django_secret_key_here
+   DEBUG=True
 
-# Database (Optional: Defaults to SQLite if omitted)
-# DB_NAME=hostel_db
-# DB_USER=postgres
-# DB_PASSWORD=password
-# DB_HOST=localhost
+   # Database (Optional: Defaults to SQLite if omitted)
+   # DB_NAME=hostel_db
+   # DB_USER=postgres
+   # DB_PASSWORD=password
+   # DB_HOST=localhost
 
-# Paystack Configuration
-PAYSTACK_SECRET_KEY=sk_test_xxxxxxxxxxxxxxxxxxxxxxxx
-PAYSTACK_PUBLIC_KEY=pk_test_xxxxxxxxxxxxxxxxxxxxxxxx
-
-5. ### Run Migrations
-python manage.py makemigrations
-python manage.py migrate
+   # Paystack Configuration
+   PAYSTACK_SECRET_KEY=sk_test_your_paystack_secret_key
+   PAYSTACK_PUBLIC_KEY=pk_test_your_paystack_public_key
