@@ -9,6 +9,7 @@ from .models import (
     HostelManager,
     Student, 
     RoomAssignment,
+    RoomPricing,
     Room,
     Payment
 )
@@ -120,6 +121,12 @@ class HostelSerializer(serializers.ModelSerializer):
             self.instance = Hostel.objects.create(address=address, **self.validated_data)
 
             return self.instance
+
+
+class RoomPricingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoomPricing
+        fields = ['capacity', "price"]
 
 # Serializers concerning the Users and students
 class UpdateUserSerializer(serializers.ModelSerializer):
