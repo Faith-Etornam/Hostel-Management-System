@@ -128,6 +128,11 @@ class RoomPricingSerializer(serializers.ModelSerializer):
         model = RoomPricing
         fields = ['capacity', "price"]
 
+    def create(self, validated_data):
+        hostel_id = self.context.get('hostel_id')
+        return RoomPricing.objects.create(hostel=hostel_id, **validated_data)
+
+
 # Serializers concerning the Users and students
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:

@@ -223,7 +223,10 @@ class RoomPricingViewSet(ModelViewSet):
     permission_classes = [IsHostelManager]
     serializer_class = RoomPricingSerializer
 
+    def get_serializer_context(self):
+        return {'hostel_id': self.request.user.manager.hostel}
+
     def get_queryset(self):
-        return RoomPricing.objects.all(hostel=self.request.user.manager.hostel)
+        return RoomPricing.objects.filter(hostel=self.request.user.manager.hostel)
 
 
