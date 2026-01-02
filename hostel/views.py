@@ -27,8 +27,9 @@ from .serializers import (
     StudentSerializer, 
     UpdateStudentSerializer, 
     RoomAssignmentSerializer,
+    RoomPricingSerializer,
     RoomSerializer,
-    PaymentSerializer
+    PaymentSerializer,
 )
 # Create your views here.
 class HostelViewSet(ModelViewSet):
@@ -217,4 +218,12 @@ class HostelManagerViewSet(ModelViewSet):
     queryset = HostelManager.objects.select_related('hostel', 'user').all()
     permission_classes = [IsAdminUser]
     serializer_class = HostelManagerSerializer
+
+class RoomPricingViewSet(ModelViewSet):
+    permission_classes = [IsHostelManager]
+    serializer_class = RoomPricingSerializer
+
+    def get_queryset(self):
+        return RoomPricing.objects.all(hostel=self.request.user.manager.hostel)
+
 

@@ -5,7 +5,8 @@ from .views import (
     HostelManagerViewSet,
     StudentViewSet, 
     RoomViewSet,
-    PaymentViewSet
+    RoomPricingViewSet,
+    PaymentViewSet,
 )
 
 router = routers.DefaultRouter()
@@ -15,6 +16,7 @@ router.register('students', StudentViewSet, basename='students')
 router.register('payments', PaymentViewSet, basename='payments')
 router.register('fees', FeeViewSet, basename='fees')
 router.register('hostel_managers', HostelManagerViewSet, basename='managers')
+router.register('room_pricing',RoomPricingViewSet, basename='room_pricing' )
 
 room_router = routers.NestedDefaultRouter(router, 'hostels', lookup='hostel')
 room_router.register('rooms', RoomViewSet, basename='hostel-rooms')
